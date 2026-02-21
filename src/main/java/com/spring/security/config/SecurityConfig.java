@@ -1,5 +1,6 @@
 package com.spring.security.config;
 
+import com.spring.security.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.sql.DataSource;
 
@@ -28,6 +30,8 @@ public class SecurityConfig {
     @Autowired
     DataSource datasource;
 
+    @Autowired
+    AuthTokenFilter authTokenFilter;
 
     //Enabling Basic Http authentication
     @Bean
@@ -39,6 +43,7 @@ public class SecurityConfig {
                                 .requestMatchers("/signin").permitAll()
                         .anyRequest().authenticated());
        // httpSecurity.httpBasic(Customizer.withDefaults());
+        httpSecurity.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
@@ -77,11 +82,7 @@ public class SecurityConfig {
             userDetailsManager.createUser(admin);
         }
 
-
-
-
         return userDetailsManager;
-
 
      }
     @Bean

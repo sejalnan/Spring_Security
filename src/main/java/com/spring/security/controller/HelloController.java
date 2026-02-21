@@ -24,7 +24,7 @@ public class HelloController {
     JwtUtils jwtUtils;
 
     // @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    @PreAuthorize("hasRole('ADMIN')") //METHOD-LEVEL-SECURITY
+   // @PreAuthorize("hasRole('ADMIN')") //METHOD-LEVEL-SECURITY
     @GetMapping("/hello")
     public String hello(){
         return "Hello";
