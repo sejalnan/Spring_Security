@@ -1,9 +1,12 @@
 package com.spring.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -27,14 +30,8 @@ public class JwtUtils {
 
     //Generate token and Issued It.
 
-    public String generateTokenFromUsername(String userName){
-
-        return Jwts.builder()
-                .subject(userName)
-                .issuedAt(new Date())
-                .expiration(new Date(new Date().getTime()+ jwtExpirationMs))
-                .signWith(key())
-                .compact();
+    public String generateTokenFromUsername(UserDetails userDetails) {
+        return null;
     }
 
     public  boolean validateJwtToken(String jwtToken){
@@ -55,5 +52,11 @@ public class JwtUtils {
         return Jwts.parser().verifyWith((SecretKey) key())
                 .build().parseSignedClaims(jwt)
                 .getPayload().getSubject();
+    }
+
+    public Claims getAllClaims(String jwt) {
+        return Jwts.parser().verifyWith((SecretKey) key())
+                .build().parseSignedClaims(jwt)
+                .getPayload();
     }
 }
